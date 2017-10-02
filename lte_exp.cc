@@ -115,15 +115,6 @@ main (int argc, char *argv[])
 	NodeContainer epcnodes;
 	epcnodes.Add(pgw);
 	epcnodes.Add(server);
-	Ptr<ListPositionAllocator> positionAllocepc = CreateObject<ListPositionAllocator> ();
-	for (uint16_t i = 0; i < epcnodes.GetN(); i++)
-		      {
-		    	positionAllocepc->Add (Vector(500 * (i+1), 0, 0));
-		      }
-	MobilityHelper mobilityepc;
-	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-	mobilityepc.SetPositionAllocator(positionAllocepc);
-	mobilityepc.Install(epcnodes);
 
 	InternetStackHelper internet;
 	internet.Install (server);
@@ -147,18 +138,39 @@ main (int argc, char *argv[])
 	enbNodes.Create(numberOfeNodeB);
 	ueNodes.Create(numberOfue);
 
-	// Install Mobility Model
-	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-	for (uint16_t i = 0; i < numberOfeNodeB; i++){
+//	Ptr<ListPositionAllocator> positionAllocepc = CreateObject<ListPositionAllocator> ();
+//	for (uint16_t i = 0; i < epcnodes.GetN(); i++)
+//		      {
+//		    	positionAllocepc->Add (Vector(500 * (i+1), 0, 0));
+//		      }
+//	MobilityHelper mobilityepc;
+//	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+//	mobilityepc.SetPositionAllocator(positionAllocepc);
+//	mobilityepc.Install(epcnodes);
 
-			positionAlloc->Add (Vector(distance * i, 0, 0));
-		}
+
+	// Install Mobility Model
+//	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+//	for (uint16_t i = 0; i < numberOfeNodeB; i++){
+//
+//			positionAlloc->Add (Vector(distance * i, 0, 0));
+//		}
+	/* Mobility model */
+	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
+	positionAlloc->Add (Vector (1.0, 1.0, 0.0));
+
 	MobilityHelper mobility;
 	mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
 	                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
 	mobility.SetPositionAllocator(positionAlloc);
-	mobility.Install(enbNodes);
 	mobility.Install(ueNodes);
+
+	MobilityHelper mobilityepc;
+	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+	mobilityepc.SetPositionAllocator(positionAlloc);
+	mobilityepc.Install(enbNodes);
+	mobilityepc.Install(epcnodes);
 
 	// Install LTE Devices to the nodes
 	NetDeviceContainer enbLteDevs = lteHelper->InstallEnbDevice (enbNodes);
@@ -179,6 +191,7 @@ main (int argc, char *argv[])
 
 	lteHelper -> Attach(ueLteDevs);
 //	lteHelper -> Attach(ueLteDevs.Get(0), enbLteDevs.Get(0));
+
 	// Install and start applications on UEs and remote host
 	uint16_t dlPort = 1234;
 	ApplicationContainer clientApps;
@@ -201,6 +214,16 @@ main (int argc, char *argv[])
 	serverApps.Start (Seconds (0.0));
 	clientApps.Start (Seconds (1.0));
 	Simulator::Stop(Seconds(10));
+
+	AnimationInterface anim ("lte-exp.xml");
+	anim.SetMaxPktsPerTraceFile(50000);
+	anim.UpdateNodeDescription(ueNodes.Get(0), "UE1");
+	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
+	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
+	anim.UpdateNodeDescription(epcnodes.Get (0), "RemoteHost");
+	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
+
+
 
 	FlowMonitorHelper flowmon;
 	Ptr<FlowMonitor> monitor;

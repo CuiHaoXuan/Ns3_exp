@@ -23,6 +23,7 @@
 #include "ns3/csma-module.h"
 #include "ns3/internet-module.h"
 #include "ns3/flow-monitor-module.h"
+#include "ns3/netanim-module.h"
 
 // Default Network Topology
 //
@@ -79,7 +80,7 @@ main (int argc, char *argv[])
   p2pDevices = pointToPoint.Install (p2pNodes);
 
   NodeContainer csmaNodes;
-  csmaNodes.Add (p2pNodes.Get (1));
+  csmaNodes.Add (p2pNodes.Get (0));
   csmaNodes.Create (nCsma);
 
   CsmaHelper csma;
@@ -91,7 +92,7 @@ main (int argc, char *argv[])
 
   NodeContainer wifiStaNodes;
   wifiStaNodes.Create (nWifi);
-  NodeContainer wifiApNode = p2pNodes.Get (0);
+  NodeContainer wifiApNode = p2pNodes.Get (1);
 
   WifiHelper wifiHelper;
   wifiHelper.SetStandard(WIFI_PHY_STANDARD_80211n_2_4GHZ );
@@ -143,7 +144,8 @@ main (int argc, char *argv[])
 
   mobility.SetPositionAllocator (positionAlloc);
   mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
+                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)),
+							 "Speed", StringValue("ns3::UniformRandomVariable[Min=13.0|Max=36.0]"));
   mobility.Install (wifiStaNodes);
 
   mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
@@ -190,13 +192,19 @@ main (int argc, char *argv[])
 
   }
 
-
-
   /* Start Applications */
   clientApp.Start (Seconds (3.0));
   serverApp.Start (Seconds (0.0));
 
   Simulator::Stop (Seconds (10.0));
+
+  AnimationInterface anim ("wifi-exp.xml");
+  anim.SetMaxPktsPerTraceFile(50000);
+  anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
+  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
+  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
+  anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
+  anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");
 
   FlowMonitorHelper flowmon;
   Ptr<FlowMonitor> monitor;
