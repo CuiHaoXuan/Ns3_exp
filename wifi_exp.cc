@@ -49,7 +49,7 @@ int
 main (int argc, char *argv[])
 {
   uint32_t nCsma = 1;
-  uint32_t nWifi = 3;
+  uint32_t nWifi = 1;
 
   uint32_t payloadSize = 1472;                       /* Transport layer payload size in bytes. */
   std::string dataRate = "65Mbps";                  /* Application layer datarate. */
@@ -143,13 +143,14 @@ main (int argc, char *argv[])
   positionAlloc->Add (Vector (1.0, 1.0, 0.0));
 
   mobility.SetPositionAllocator (positionAlloc);
-  mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)),
-							 "Speed", StringValue("ns3::UniformRandomVariable[Min=13.0|Max=36.0]"));
-  mobility.Install (wifiStaNodes);
+//  mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
+//                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)),
+//							 "Speed", StringValue("ns3::UniformRandomVariable[Min=13.0|Max=36.0]"));
+//  mobility.Install (wifiStaNodes);
 
   mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
   mobility.Install (wifiApNode);
+  mobility.Install (wifiStaNodes);
 
   InternetStackHelper stack;
   stack.Install (csmaNodes);
@@ -188,23 +189,26 @@ main (int argc, char *argv[])
 	  server.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
 	  server.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
 	  server.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
+	  server.SetAttribute("MaxBytes", UintegerValue (1000000000));
 	  serverApp = server.Install (csmaNodes.Get (nCsma));
 
   }
 
   /* Start Applications */
-  clientApp.Start (Seconds (3.0));
+  clientApp.Start (Seconds (1.0));
   serverApp.Start (Seconds (0.0));
 
-  Simulator::Stop (Seconds (10.0));
+  Simulator::Stop (Seconds (40.0));
 
   AnimationInterface anim ("wifi-exp.xml");
-  anim.SetMaxPktsPerTraceFile(50000);
+  anim.SetMaxPktsPerTraceFile(9999999999999);
   anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
-  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
-  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
+//  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
+//  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
   anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
+  anim.SetConstantPosition(p2pNodes.Get(1), 0.2, 0.2);
   anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");
+  anim.UpdateNodeDescription(p2pNodes.Get(0), "Server");
 
   FlowMonitorHelper flowmon;
   Ptr<FlowMonitor> monitor;

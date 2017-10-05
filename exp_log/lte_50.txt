@@ -4,3 +4,21 @@ Waf: Entering directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/bu
 Waf: Leaving directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
 Build commands will be stored in build/compile_commands.json
 'build' finished successfully (5.022s)
+Flow 1 (1.0.0.2 -> 7.0.0.2)
+  Tx Packets: 691714
+  Rx Packets: 691466
+  Tx Bytes:   381844136
+  Rx Bytes:   381707844
+  Delay:   +18567376.0ns
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 30.5366 Mbps
+Flow 2 (7.0.0.2 -> 1.0.0.2)
+  Tx Packets: 345733
+  Rx Packets: 345727
+  Tx Bytes:   17978120
+  Rx Bytes:   17977808
+  Delay:   +17389010.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 1.48307 Mbps

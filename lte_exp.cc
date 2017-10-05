@@ -48,7 +48,8 @@ main (int argc, char *argv[])
 
 	//setup ue and enodeb
 	uint16_t numberOfeNodeB =1;
-	uint16_t numberOfue =3;
+	uint16_t numberOfue =1;
+
 	double distance = 100.0;
 	std::string dataRate = "1Gbps";
 
@@ -160,17 +161,18 @@ main (int argc, char *argv[])
 	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
 	positionAlloc->Add (Vector (1.0, 1.0, 0.0));
 
-	MobilityHelper mobility;
-	mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-	                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
-	mobility.SetPositionAllocator(positionAlloc);
-	mobility.Install(ueNodes);
+//	MobilityHelper mobility;
+//	mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
+//	                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
+//	mobility.SetPositionAllocator(positionAlloc);
+//	mobility.Install(ueNodes);
 
 	MobilityHelper mobilityepc;
 	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
 	mobilityepc.SetPositionAllocator(positionAlloc);
 	mobilityepc.Install(enbNodes);
-	mobilityepc.Install(epcnodes);
+//	mobilityepc.Install(epcnodes);
+	mobilityepc.Install(ueNodes);
 
 	// Install LTE Devices to the nodes
 	NetDeviceContainer enbLteDevs = lteHelper->InstallEnbDevice (enbNodes);
@@ -204,8 +206,8 @@ main (int argc, char *argv[])
 			onOffHelper.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
 			onOffHelper.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
 			onOffHelper.SetAttribute ("PacketSize",UintegerValue(5000));
+//			onOffHelper.SetAttribute("MaxBytes", UintegerValue (1000000000));
 			serverApps.Add(onOffHelper.Install(remoteHost));//tcp sender
-
 			PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
 			clientApps.Add( sink.Install (ueNodes.Get (u)));//tcp reciever
 
@@ -213,17 +215,18 @@ main (int argc, char *argv[])
 		}
 	serverApps.Start (Seconds (0.0));
 	clientApps.Start (Seconds (1.0));
-	Simulator::Stop(Seconds(10));
+	Simulator::Stop(Seconds(100));
 
 	AnimationInterface anim ("lte-exp.xml");
-	anim.SetMaxPktsPerTraceFile(50000);
+	anim.SetMaxPktsPerTraceFile(9999999999999);
 	anim.UpdateNodeDescription(ueNodes.Get(0), "UE1");
-	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
-	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
+//	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
+//	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
 	anim.UpdateNodeDescription(epcnodes.Get (0), "RemoteHost");
+	anim.UpdateNodeDescription(epcnodes.Get (1), "RemoteHost");
 	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
-
-
+	anim.SetConstantPosition(enbNodes.Get(0), 0.2, 0.2);
+	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
 
 	FlowMonitorHelper flowmon;
 	Ptr<FlowMonitor> monitor;
