@@ -1,0 +1,8 @@
+Waf: Entering directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
+[ 940/1987] Compiling scratch/wifi_exp.cc
+[ 944/1987] Compiling scratch/lte_exp.cc
+[1954/1987] Linking build/scratch/wifi_exp
+[1976/1987] Linking build/scratch/lte_exp
+Waf: Leaving directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (7.891s)

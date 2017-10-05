@@ -1,0 +1,6 @@
+Waf: Entering directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
+[ 943/1987] Compiling scratch/lte_exp.cc
+[1976/1987] Linking build/scratch/lte_exp
+Waf: Leaving directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (5.022s)
