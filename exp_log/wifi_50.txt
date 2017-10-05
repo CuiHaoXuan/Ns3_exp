@@ -1,8 +1,24 @@
 Waf: Entering directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
-[ 940/1987] Compiling scratch/wifi_exp.cc
-[ 944/1987] Compiling scratch/lte_exp.cc
-[1954/1987] Linking build/scratch/wifi_exp
-[1976/1987] Linking build/scratch/lte_exp
+[1821/1987] Compiling scratch/wifi_exp.cc
+[1976/1987] Linking build/scratch/wifi_exp
 Waf: Leaving directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
 Build commands will be stored in build/compile_commands.json
-'build' finished successfully (7.891s)
+'build' finished successfully (4.633s)
+Flow 1 (10.1.2.2 -> 7.0.0.1)
+  Tx Packets: 260429
+  Rx Packets: 260322
+  Tx Bytes:   147129768
+  Rx Bytes:   147069420
+  Delay:   +11296854.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 49.0232 Mbps
+Flow 2 (7.0.0.1 -> 10.1.2.2)
+  Tx Packets: 130161
+  Rx Packets: 129829
+  Tx Bytes:   6768376
+  Rx Bytes:   6751112
+  Delay:   +10043525.0ns
+  Lost Packets:   258
+  Packet Dropped:   4
+  Throughput: 2.2517 Mbps
