@@ -35,8 +35,11 @@ main (int argc, char *argv[])
 
   uint32_t nCsma = 1;
   uint32_t nWifi = 1;
-  std::string dataRate = "1Gbps";
+  std::string phyRate = "HtMcs7";
+  std::string dataRate = "100Mbps";
   uint32_t payloadSize = 1472;
+
+  Time::SetResolution (Time::NS);
 
   CommandLine cmd;
   cmd.AddValue ("nCsma", "Number of \"extra\" CSMA nodes/devices", nCsma);
@@ -45,8 +48,6 @@ main (int argc, char *argv[])
 
   /* Set channel width */
   Config::Set ("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Phy/ChannelWidth", UintegerValue (20));
-  /* Configure TCP Options */
-//  Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (payloadSize));
   /*Transmission mode is Tcp(NewReno)*/
   Config::SetDefault ("ns3::TcpL4Protocol::SocketType", StringValue ("ns3::TcpNewReno"));
 
@@ -55,13 +56,14 @@ main (int argc, char *argv[])
 
   PointToPointHelper pointToPoint;
   pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("5Mbps"));
+  pointToPoint.SetDeviceAttribute ("Mtu", UintegerValue (1500));
   pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
 
   NetDeviceContainer p2pDevices;
   p2pDevices = pointToPoint.Install (p2pNodes);
 
   NodeContainer csmaNodes;
-  csmaNodes.Add (p2pNodes.Get (1));
+  csmaNodes.Add (p2pNodes.Get (0));
   csmaNodes.Create (nCsma);
 
   CsmaHelper csma;
@@ -73,15 +75,34 @@ main (int argc, char *argv[])
 
   NodeContainer wifiStaNodes;
   wifiStaNodes.Create (nWifi);
-  NodeContainer wifiApNode = p2pNodes.Get (0);
+  NodeContainer wifiApNode = p2pNodes.Get (1);
 
+  WifiHelper wifiHelper;
+//  wifiHelper.SetRemoteStationManager ("ns3::AarfWifiManager");
+  wifiHelper.SetStandard(WIFI_PHY_STANDARD_80211n_2_4GHZ );
+
+  /*Set up Channel*/
   YansWifiChannelHelper channel = YansWifiChannelHelper::Default ();
-  YansWifiPhyHelper phy = YansWifiPhyHelper::Default ();
-  phy.SetChannel (channel.Create ());
+  channel.SetPropagationDelay ("ns3::ConstantSpeedPropagationDelayModel");
+  channel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","ReferenceLoss", DoubleValue (48.0));
 
-  WifiHelper wifi;
-  wifi.SetRemoteStationManager ("ns3::AarfWifiManager");
+  YansWifiPhyHelper wifiPhy = YansWifiPhyHelper::Default ();
+  wifiPhy.SetChannel (channel.Create ());
+  wifiPhy.Set ("TxPowerStart", DoubleValue (10.0));
+  wifiPhy.Set ("TxPowerEnd", DoubleValue (10.0));
+  wifiPhy.Set ("TxPowerLevels", UintegerValue (1));
+  wifiPhy.Set ("TxGain", DoubleValue (0));
+  wifiPhy.Set ("RxGain", DoubleValue (0));
+  wifiPhy.Set ("RxNoiseFigure", DoubleValue (10));
+  wifiPhy.Set ("CcaMode1Threshold", DoubleValue (-79));
+  wifiPhy.Set ("EnergyDetectionThreshold", DoubleValue (-79 + 3));
+  wifiPhy.SetErrorRateModel ("ns3::YansErrorRateModel");
+  wifiHelper.SetRemoteStationManager ("ns3::ConstantRateWifiManager",
+                                      "DataMode", StringValue (phyRate),
+                                      "ControlMode", StringValue ("HtMcs0"));
 
+
+  /**Install mac address for sta/ap**/
   WifiMacHelper mac;
   Ssid ssid = Ssid ("ns-3-ssid");
   mac.SetType ("ns3::StaWifiMac",
@@ -89,13 +110,13 @@ main (int argc, char *argv[])
                "ActiveProbing", BooleanValue (false));
 
   NetDeviceContainer staDevices;
-  staDevices = wifi.Install (phy, mac, wifiStaNodes);
+  staDevices = wifiHelper.Install (wifiPhy, mac, wifiStaNodes);
 
   mac.SetType ("ns3::ApWifiMac",
                "Ssid", SsidValue (ssid));
 
   NetDeviceContainer apDevices;
-  apDevices = wifi.Install (phy, mac, wifiApNode);
+  apDevices = wifiHelper.Install (wifiPhy, mac, wifiApNode);
 
   MobilityHelper mobility;
 
@@ -104,8 +125,15 @@ main (int argc, char *argv[])
                                  "MinY", DoubleValue (0.0),
                                  "DeltaX", DoubleValue (5.0),
                                  "DeltaY", DoubleValue (10.0),
-                                 "GridWidth", UintegerValue (3),
+                                 "GridWidth", UintegerValue (5),
                                  "LayoutType", StringValue ("RowFirst"));
+
+//  /* Mobility model */
+//  Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+//  positionAlloc->Add (Vector (0.0, 0.0, 0.0));
+//  positionAlloc->Add (Vector (1.0, 1.0, 0.0));
+
+//  mobility.SetPositionAllocator (positionAlloc);
 
   mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
                              "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
@@ -141,18 +169,30 @@ main (int argc, char *argv[])
   ApplicationContainer serverApps;
   ApplicationContainer clientApps = sinkHelper.Install (wifiStaNodes);
 
-  /* Install TCP/UDP Transmitter on the station */
-  OnOffHelper server ("ns3::TcpSocketFactory", (InetSocketAddress (staInterface.GetAddress (0), 1235)));
-  server.SetAttribute ("PacketSize", UintegerValue (payloadSize));
-  server.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  server.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-  server.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
-//  server.SetAttribute("MaxBytes", UintegerValue (1000000000));
-  serverApps = server.Install (csmaNodes.Get (nCsma));
+  for (uint32_t i = 0;i < wifiStaNodes.GetN(); i++){
+	  /* Install TCP/UDP Transmitter on the station */
+	  OnOffHelper server ("ns3::TcpSocketFactory", (InetSocketAddress (staInterface.GetAddress (i), 1235)));
+	  server.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
+	  server.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+	  server.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
+	  server.SetAttribute ("PacketSize", UintegerValue (payloadSize));
+//	  server.SetAttribute("MaxBytes", UintegerValue (1000000000));
+	  serverApps = server.Install (csmaNodes.Get (nCsma));
+  }
 
   clientApps.Start (Seconds (1.0));
-  serverApps.Start (Seconds (0.0));
+  serverApps.Start (Seconds (1.0));
   Simulator::Stop (Seconds (25.0));
+
+  AnimationInterface anim ("wifi-exp_2.xml");
+  anim.SetMaxPktsPerTraceFile(9999999999999);
+  anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
+//  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
+//  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
+  anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
+//  anim.SetConstantPosition(p2pNodes.Get(1), 0.2, 0.2);
+  anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");
+  anim.UpdateNodeDescription(p2pNodes.Get(0), "Server");
 
   FlowMonitorHelper flowmon;
   Ptr<FlowMonitor> monitor;

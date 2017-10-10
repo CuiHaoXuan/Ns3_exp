@@ -40,7 +40,7 @@ using namespace ns3;
 using namespace std;
 
 
-NS_LOG_COMPONENT_DEFINE ("lwa_test");
+NS_LOG_COMPONENT_DEFINE ("lte_test");
 
 int
 main (int argc, char *argv[])
@@ -51,18 +51,16 @@ main (int argc, char *argv[])
 	uint16_t numberOfue =1;
 
 	double distance = 100.0;
-	std::string dataRate = "1Gbps";
+	std::string dataRate = "100Mbps";
+	uint32_t payloadSize = 1472;
 
 	// Command line arguments
 	CommandLine cmd;
 	cmd.AddValue ("numberOfUes", "Number of UEs", numberOfue);
 	cmd.AddValue ("numberOfEnbs", "Number of eNBs", numberOfeNodeB);
-	cmd.AddValue ("dataRate", "Application data ate", dataRate);
+//	cmd.AddValue ("dataRate", "Application data ate", dataRate);
 	cmd.AddValue("distance", "Distance between eNBs [m]", distance);
 	cmd.Parse(argc, argv);
-
-	//  LogComponentEnable("OnOffApplication", LOG_LEVEL_INFO);
-	Time::SetResolution (Time::NS);
 
 	Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
 	Ptr<PointToPointEpcHelper>  epcHelper = CreateObject<PointToPointEpcHelper> ();
@@ -99,12 +97,13 @@ main (int argc, char *argv[])
 	Config::SetDefault ("ns3::LteUePhy::TxPower", DoubleValue (20));
 
 	/*Antenna configuration is MIMO Spatial Multiplexity (2 layers)*/
-	Config::SetDefault ("ns3::LteEnbRrc::EpsBearerToRlcMapping",  EnumValue(ns3::LteEnbRrc::RLC_AM_ALWAYS));
+//	Config::SetDefault ("ns3::LteEnbRrc::EpsBearerToRlcMapping",  EnumValue(ns3::LteEnbRrc::RLC_AM_ALWAYS));
 	Config::SetDefault ("ns3::LteEnbRrc::DefaultTransmissionMode", UintegerValue(2));
-
 
 	/*Transmission mode is Tcp(NewReno)*/
 	Config::SetDefault ("ns3::TcpL4Protocol::SocketType", StringValue ("ns3::TcpNewReno"));
+	/* Configure TCP Options */
+	Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (payloadSize));
 
 	Ptr<Node> pgw = epcHelper->GetPgwNode ();
 
@@ -122,7 +121,7 @@ main (int argc, char *argv[])
 
 	// Create the Internet
 	PointToPointHelper p2ph;
-	p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("1Gb/s")));
+	p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Mbps")));
 	p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
 	p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
 	NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
@@ -157,22 +156,31 @@ main (int argc, char *argv[])
 //			positionAlloc->Add (Vector(distance * i, 0, 0));
 //		}
 	/* Mobility model */
-	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
-	positionAlloc->Add (Vector (1.0, 1.0, 0.0));
+//	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+//	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
+//	positionAlloc->Add (Vector (1.0, 1.0, 0.0));
 
-//	MobilityHelper mobility;
-//	mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-//	                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
+	MobilityHelper mobility;
+
+	mobility.SetPositionAllocator ("ns3::GridPositionAllocator",
+	                                 "MinX", DoubleValue (0.0),
+	                                 "MinY", DoubleValue (0.0),
+	                                 "DeltaX", DoubleValue (5.0),
+	                                 "DeltaY", DoubleValue (10.0),
+	                                 "GridWidth", UintegerValue (3),
+	                                 "LayoutType", StringValue ("RowFirst"));
+
+	mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
+	                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
 //	mobility.SetPositionAllocator(positionAlloc);
-//	mobility.Install(ueNodes);
+	mobility.Install(ueNodes);
 
 	MobilityHelper mobilityepc;
 	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-	mobilityepc.SetPositionAllocator(positionAlloc);
+//	mobilityepc.SetPositionAllocator(positionAlloc);
 	mobilityepc.Install(enbNodes);
 //	mobilityepc.Install(epcnodes);
-	mobilityepc.Install(ueNodes);
+//	mobilityepc.Install(ueNodes);
 
 	// Install LTE Devices to the nodes
 	NetDeviceContainer enbLteDevs = lteHelper->InstallEnbDevice (enbNodes);
@@ -205,7 +213,7 @@ main (int argc, char *argv[])
 			onOffHelper.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
 			onOffHelper.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
 			onOffHelper.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
-			onOffHelper.SetAttribute ("PacketSize",UintegerValue(5000));
+			onOffHelper.SetAttribute ("PacketSize",UintegerValue(payloadSize));
 //			onOffHelper.SetAttribute("MaxBytes", UintegerValue (1000000000));
 			serverApps.Add(onOffHelper.Install(remoteHost));//tcp sender
 			PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
@@ -213,9 +221,9 @@ main (int argc, char *argv[])
 
 			dlPort++;
 		}
-	serverApps.Start (Seconds (0.0));
+	serverApps.Start (Seconds (1.0));
 	clientApps.Start (Seconds (1.0));
-	Simulator::Stop(Seconds(100));
+	Simulator::Stop(Seconds(10.0));
 
 	AnimationInterface anim ("lte-exp.xml");
 	anim.SetMaxPktsPerTraceFile(9999999999999);
