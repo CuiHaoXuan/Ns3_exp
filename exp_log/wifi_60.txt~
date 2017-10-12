@@ -1,0 +1,22 @@
+unning Wi-Fi
+Flow 1 (10.1.2.2 -> 7.0.0.1)
+  Tx Packets: 401921
+  Rx Packets: 401859
+  Tx Bytes:   612523196
+  Rx Bytes:   612428708
+  Delay:   +9984175.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 48.9944 Mbps
+Flow 2 (7.0.0.1 -> 10.1.2.2)
+  Tx Packets: 200930
+  Rx Packets: 200917
+  Tx Bytes:   10448352
+  Rx Bytes:   10447676
+  Delay:   +9775936.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.835945 Mbps
+Running Wi-Fi Completes
+
+sim time:100(yzu/wifi_exp.cc)
