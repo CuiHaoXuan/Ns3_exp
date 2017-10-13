@@ -52,7 +52,7 @@ main (int argc, char *argv[])
   uint32_t nWifi = 1;
 
   uint32_t payloadSize = 1472;                       /* Transport layer payload size in bytes. */
-  std::string dataRate = "65Mbps";                  /* Application layer datarate. */
+  std::string dataRate = "100Mbps";                  /* Application layer datarate. */
   std::string tcpVariant = "ns3::TcpNewReno";        /* TCP variant type. */
   std::string phyRate = "HtMcs7";                    /* Physical layer bitrate. */
   CommandLine cmd;
@@ -60,10 +60,11 @@ main (int argc, char *argv[])
   cmd.AddValue ("nWifi", "Number of wifi STA devices", nWifi);
   cmd.Parse (argc,argv);
 
+  LogComponentEnable("OnOffApplication", LOG_LEVEL_ALL);
   Time::SetResolution (Time::NS);
 
   /* Configure TCP Options */
-  Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (payloadSize));
+  Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1472));
   /* Set channel width */
   Config::Set ("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Phy/ChannelWidth", UintegerValue (20));
 
@@ -73,7 +74,7 @@ main (int argc, char *argv[])
 
   PointToPointHelper pointToPoint;
   pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
-//  pointToPoint.SetDeviceAttribute ("Mtu", UintegerValue (1500));
+  pointToPoint.SetDeviceAttribute ("Mtu", UintegerValue (1500));
   pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
 
   NetDeviceContainer p2pDevices;
@@ -98,22 +99,13 @@ main (int argc, char *argv[])
   wifiHelper.SetStandard(WIFI_PHY_STANDARD_80211n_2_4GHZ );
 
   /* Set up Legacy Channel */
-  YansWifiChannelHelper wifiChannel ;
+  YansWifiChannelHelper wifiChannel;
   wifiChannel.SetPropagationDelay ("ns3::ConstantSpeedPropagationDelayModel");
   wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","ReferenceLoss", DoubleValue (48.0));
 
   /* Setup Physical Layer */
   YansWifiPhyHelper wifiPhy = YansWifiPhyHelper::Default ();
   wifiPhy.SetChannel (wifiChannel.Create ());
-  wifiPhy.Set ("TxPowerStart", DoubleValue (10.0));
-  wifiPhy.Set ("TxPowerEnd", DoubleValue (10.0));
-  wifiPhy.Set ("TxPowerLevels", UintegerValue (1));
-  wifiPhy.Set ("TxGain", DoubleValue (0));
-  wifiPhy.Set ("RxGain", DoubleValue (0));
-  wifiPhy.Set ("RxNoiseFigure", DoubleValue (10));
-  wifiPhy.Set ("CcaMode1Threshold", DoubleValue (-79));
-  wifiPhy.Set ("EnergyDetectionThreshold", DoubleValue (-79 + 3));
-  wifiPhy.SetErrorRateModel ("ns3::YansErrorRateModel");
   wifiHelper.SetRemoteStationManager ("ns3::ConstantRateWifiManager",
                                       "DataMode", StringValue (phyRate),
                                       "ControlMode", StringValue ("HtMcs0"));
@@ -140,7 +132,7 @@ main (int argc, char *argv[])
   /* Mobility model */
   Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
   positionAlloc->Add (Vector (0.0, 0.0, 0.0));
-  positionAlloc->Add (Vector (1.0, 1.0, 0.0));
+  positionAlloc->Add (Vector (5.0, 5.0, 0.0));
 
   mobility.SetPositionAllocator (positionAlloc);
 //  mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
@@ -197,18 +189,19 @@ main (int argc, char *argv[])
   /* Start Applications */
   clientApp.Start (Seconds (1.0));
   serverApp.Start (Seconds (0.0));
+  serverApp.Stop(Seconds (20));
 
-  Simulator::Stop (Seconds (40.0));
+  Simulator::Stop (Seconds (100));
 
-  AnimationInterface anim ("wifi-exp.xml");
-  anim.SetMaxPktsPerTraceFile(9999999999999);
-  anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
-//  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
-//  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
-  anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
-  anim.SetConstantPosition(p2pNodes.Get(1), 0.2, 0.2);
-  anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");
-  anim.UpdateNodeDescription(p2pNodes.Get(0), "Server");
+//  AnimationInterface anim ("wifi-exp.xml");
+//  anim.SetMaxPktsPerTraceFile(9999999999999);
+//  anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
+////  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
+////  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
+//  anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
+//  anim.SetConstantPosition(p2pNodes.Get(1), 1.0, 1.0);
+//  anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");
+//  anim.UpdateNodeDescription(p2pNodes.Get(0), "Server");
 
   FlowMonitorHelper flowmon;
   Ptr<FlowMonitor> monitor;
@@ -229,6 +222,7 @@ main (int argc, char *argv[])
 		std::cout << "  Rx Packets: " << i->second.rxPackets << "\n";
 		std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
 		std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
+		std::cout << "  Applicataion time:	" << i->second.timeFirstTxPacket - i->second.timeLastRxPacket << "\n";
 		std::cout << "  Delay:   " << (i->second.delaySum / i->second.rxPackets)   << "\n";
 		std::cout << "  Lost Packets:   " << ((i->second.lostPackets )) << "\n";
 		std::cout << "  Packet Dropped:   " << i -> second.packetsDropped.size() << "\n";
