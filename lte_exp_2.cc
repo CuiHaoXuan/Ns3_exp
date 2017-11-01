@@ -48,7 +48,7 @@ main (int argc, char *argv[])
 
 	//setup ue and enodeb
 	uint16_t numberOfeNodeB =1;
-	uint16_t numberOfue =3;
+	uint16_t numberOfue =1;
 
 	double distance = 100.0;
 	std::string dataRate = "100.8Mbps";
@@ -160,29 +160,31 @@ main (int argc, char *argv[])
 //		}
 	/* Mobility model */
 	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-	positionAlloc->Add (Vector (60.0, 0.0, 0.0));
-	// positionAlloc->Add (Vector (1.0, 1.0, 0.0));
+	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
+	positionAlloc->Add (Vector (1.0, 1.0, 0.0));
 
 	MobilityHelper mobility;
-    // Set random walk mobility for UEs
-    mobility.SetPositionAllocator ("ns3::GridPositionAllocator",
-                                    "MinX", DoubleValue (0.0),
-                                    "MinY", DoubleValue (0.0),
-                                    "DeltaX", DoubleValue (80.0),
-                                    "DeltaY", DoubleValue (60.0),
-                                    "GridWidth", UintegerValue (10),
-                                    "LayoutType", StringValue ("RowFirst"));
+	mobility.SetPositionAllocator ("ns3::GridPositionAllocator",
+	                                    "MinX", DoubleValue (251.0),
+	                                    "MinY", DoubleValue (501.0),
+	                                    "DeltaX", DoubleValue (80.0),
+	                                    "DeltaY", DoubleValue (60.0),
+	                                    "GridWidth", UintegerValue (5),
+	                                    "LayoutType", StringValue ("RowFirst"));
 
-    mobility.SetMobilityModel("ns3::RandomWalk2dMobilityModel",
-                                "Mode", StringValue ("Distance"),
-                                "Time", TimeValue(Seconds(0.5)),
-                                "Speed", StringValue("ns3::UniformRandomVariable[Min=13.0|Max=36.0]"), // 50Km/h-130Km/h
-                                "Direction", StringValue("ns3::UniformRandomVariable[Min=0.0|Max=6.283184]"), // 0-360
-                                "Bounds", RectangleValue (Rectangle (-150, 750, -500 , 750 )));
+	mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
+									"Mode", StringValue ("Distance"),
+									"Distance", DoubleValue (10),
+									"Time", TimeValue(Seconds(0.5)),
+									"Speed", StringValue("ns3::UniformRandomVariable[Min=13.0|Max=36.0]"), // 50Km/h-130Km/h
+									"Direction", StringValue("ns3::UniformRandomVariable[Min=0.0|Max=6.283184]"), // 0-360
+									"Bounds", RectangleValue (Rectangle (250, 750, 500 , 750)));
 	// mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
 	// mobility.SetPositionAllocator(positionAlloc);
 	mobility.Install(ueNodes);
 
+//	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+//	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
 	MobilityHelper mobilityepc;
 	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
 	mobilityepc.SetPositionAllocator(positionAlloc);
@@ -220,7 +222,7 @@ main (int argc, char *argv[])
 			OnOffHelper onOffHelper ("ns3::TcpSocketFactory", InetSocketAddress (ueIpIface.GetAddress(u), dlPort));
 			onOffHelper.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
 			onOffHelper.SetAttribute ("PacketSize",UintegerValue(payloadSize));
-			onOffHelper.SetAttribute("MaxBytes", UintegerValue (100000000));
+			onOffHelper.SetAttribute("MaxBytes", UintegerValue (4200000000));
 			serverApps.Add(onOffHelper.Install(remoteHost));//tcp sender
 			PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
 			clientApps.Add( sink.Install (ueNodes.Get (u)));//tcp reciever
@@ -230,25 +232,26 @@ main (int argc, char *argv[])
 	serverApps.Start (Seconds (0.0));
 //	serverApps.Stop(Seconds (30.0));
 	clientApps.Start (Seconds (1.0));
-	Simulator::Stop(Seconds(2000));
+	Simulator::Stop(Seconds(290));
 
-	AnimationInterface anim ("lte-exp.xml");
-	anim.SetMaxPktsPerTraceFile(9999999999999);
-	anim.UpdateNodeDescription(ueNodes.Get(0), "UE1");
-	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
-	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
-	anim.UpdateNodeDescription(epcnodes.Get (0), "RemoteHost");
-	anim.UpdateNodeDescription(epcnodes.Get (1), "RemoteHost");
-	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
-	anim.SetConstantPosition(enbNodes.Get(0), 50.0, 50.0);
-	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
+//	AnimationInterface anim ("lte-exp-2.xml");
+//	anim.SetMaxPktsPerTraceFile(9999999999);
+//	anim.UpdateNodeDescription(ueNodes.Get(0), "UE1");
+//	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
+////	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
+//	anim.UpdateNodeDescription(epcnodes.Get (0), "RemoteHost");
+//	anim.UpdateNodeColor(epcnodes.Get(0), 10, 255, 10);
+//	anim.UpdateNodeDescription(epcnodes.Get (1), "RemoteHost");
+//	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
+//	anim.SetConstantPosition(enbNodes.Get(0), 10.0, 10.0);
+//	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
 
 	FlowMonitorHelper flowmon;
 	Ptr<FlowMonitor> monitor;
 	monitor = flowmon.Install(server);
 	monitor = flowmon.Install(ueNodes);
 
-	NS_LOG_UNCOND("Running Lte");
+	NS_LOG_UNCOND("Running Lte_2");
 	Simulator::Run();
 
 	monitor->CheckForLostPackets ();
@@ -263,7 +266,7 @@ main (int argc, char *argv[])
           std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
           std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
           std::cout << "  Delay:   " << (i->second.delaySum.GetSeconds() / i->second.rxPackets)   << "\n";
-          std::cout << "  Delay Sum:   " << i->second.delaySum.GetSeconds()   << "\n";
+          std::cout << "  Delay Sum:   " << i->second.delaySum.GetSeconds()  << "\n";
           std::cout << "  Lost Packets:   " << ((i->second.lostPackets )) << "\n";
           std::cout << "  Packet Dropped:   " << i -> second.packetsDropped.size() << "\n";
           std::cout << "  Throughput: " << i->second.rxBytes * 8.0
@@ -275,7 +278,7 @@ main (int argc, char *argv[])
 
 	Simulator::Destroy();
 
-	NS_LOG_UNCOND("Running Lte Completes");
+	NS_LOG_UNCOND("Running Lte_2 Completes");
 
 	return 0;
 

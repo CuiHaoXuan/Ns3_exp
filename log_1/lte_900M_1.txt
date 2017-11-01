@@ -1,0 +1,26 @@
+Running Lte
+Flow 1 (1.0.0.2 -> 7.0.0.2)
+  Tx Packets: 581695
+  Rx Packets: 581694
+  Tx Bytes:   902786148
+  Rx Bytes:   902786092
+  Delay:   0.0238675
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 12.3666 Mbps
+  Time:	  0
+  TxTime:	  0
+  RxTime:	  584.014
+Flow 2 (7.0.0.2 -> 1.0.0.2)
+  Tx Packets: 290987
+  Rx Packets: 290987
+  Tx Bytes:   15131328
+  Rx Bytes:   15131328
+  Delay:   0.0169017
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.208341 Mbps
+  Time:	  0
+  TxTime:	  3.014
+  RxTime:	  584.035
+Running Lte_2 Completes
