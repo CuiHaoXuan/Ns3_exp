@@ -49,22 +49,24 @@ int
 main (int argc, char *argv[])
 {
   uint32_t nCsma = 1;
-  uint32_t nWifi = 1;
+  uint32_t nWifi = 3;
 
-  uint32_t payloadSize = 1472;                       /* Transport layer payload size in bytes. */
-  std::string dataRate = "100Mbps";                  /* Application layer datarate. */
-  std::string tcpVariant = "ns3::TcpNewReno";        /* TCP variant type. */
+  uint32_t payloadSize = 1500;                       /* Transport layer payload size in bytes. */
+  std::string dataRate = "64Mbps";                  /* Application layer datarate. */
   std::string phyRate = "HtMcs7";                    /* Physical layer bitrate. */
+
   CommandLine cmd;
   cmd.AddValue ("nCsma", "Number of \"extra\" CSMA nodes/devices", nCsma);
   cmd.AddValue ("nWifi", "Number of wifi STA devices", nWifi);
   cmd.Parse (argc,argv);
 
-  LogComponentEnable("OnOffApplication", LOG_LEVEL_ALL);
+//  LogComponentEnable("OnOffApplication", LOG_LEVEL_ALL);
   Time::SetResolution (Time::NS);
 
   /* Configure TCP Options */
-  Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (1472));
+  Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue (payloadSize));
+  /*Transmission mode is Tcp(NewReno)*/
+  Config::SetDefault ("ns3::TcpL4Protocol::SocketType", StringValue ("ns3::TcpNewReno"));
   /* Set channel width */
   Config::Set ("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Phy/ChannelWidth", UintegerValue (20));
 
@@ -74,7 +76,7 @@ main (int argc, char *argv[])
 
   PointToPointHelper pointToPoint;
   pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("100Mbps"));
-  pointToPoint.SetDeviceAttribute ("Mtu", UintegerValue (1500));
+//  pointToPoint.SetDeviceAttribute ("Mtu", UintegerValue (1500));
   pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
 
   NetDeviceContainer p2pDevices;
@@ -112,7 +114,7 @@ main (int argc, char *argv[])
 
 
 
-  WifiMacHelper mac;
+  HtWifiMacHelper mac = HtWifiMacHelper :: Default ();
   Ssid ssid = Ssid ("ns-3-ssid");
   mac.SetType ("ns3::StaWifiMac",
                "Ssid", SsidValue (ssid),
@@ -129,20 +131,39 @@ main (int argc, char *argv[])
 
   MobilityHelper mobility;
 
-  /* Mobility model */
-  Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-  positionAlloc->Add (Vector (0.0, 0.0, 0.0));
-  positionAlloc->Add (Vector (5.0, 5.0, 0.0));
+  // /* Mobility model */
+  // Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+  // positionAlloc->Add (Vector (0.0, 0.0, 0.0));
 
-  mobility.SetPositionAllocator (positionAlloc);
+  mobility.SetPositionAllocator ("ns3::GridPositionAllocator",
+                                 "MinX", DoubleValue (10.0),
+                                 "MinY", DoubleValue (7.0),
+                                 "DeltaX", DoubleValue (5.0),
+                                 "DeltaY", DoubleValue (10.0),
+                                 "GridWidth", UintegerValue (5),
+                                 "LayoutType", StringValue ("RowFirst"));
+
 //  mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-//                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)),
-//							 "Speed", StringValue("ns3::UniformRandomVariable[Min=13.0|Max=36.0]"));
-//  mobility.Install (wifiStaNodes);
+//		  	  	  	  	  	 "Distance", DoubleValue(5.0),
+//                             "Speed", StringValue("ns3::UniformRandomVariable[Min=2.0|Max=4.0]"),
+//                             "Direction", StringValue("ns3::UniformRandomVariable[Min=0.0|Max=6.283184]"),
+//                             "Bounds", RectangleValue (Rectangle (-25, 30, -25, 30)));
+  mobility.SetMobilityModel ("ns3::SteadyStateRandomWaypointMobilityModel",
+		  	  	  	  	  	 "MinSpeed", DoubleValue(5.0),
+  	  	  	  	  	  	  	 "MaxSpeed", DoubleValue(10.0),
+							 "MinX", DoubleValue(5.0),
+							 "MaxX", DoubleValue(10.0),
+							 "MinY", DoubleValue(5.0),
+							 "MaxY", DoubleValue(10.0));
+ mobility.Install (wifiStaNodes);
 
+  /* Mobility model */
+  Ptr<ListPositionAllocator> positionAllocAp = CreateObject<ListPositionAllocator> ();
+  positionAllocAp->Add (Vector (0.0, 0.0, 0.0));
+  mobility.SetPositionAllocator (positionAllocAp);
   mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
   mobility.Install (wifiApNode);
-  mobility.Install (wifiStaNodes);
+  // mobility.Install (wifiStaNodes);
 
   InternetStackHelper stack;
   stack.Install (csmaNodes);
@@ -175,33 +196,31 @@ main (int argc, char *argv[])
 
   for (uint32_t i = 0;i < wifiStaNodes.GetN(); i++){
 
-	  /* Install TCP/UDP Transmitter on the station */
-	  OnOffHelper server ("ns3::TcpSocketFactory", (InetSocketAddress (staInterface.GetAddress (i), dlPort)));
-	  server.SetAttribute ("PacketSize", UintegerValue (payloadSize));
-	  server.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-	  server.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-	  server.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
-	  server.SetAttribute("MaxBytes", UintegerValue (1000000000));
-	  serverApp = server.Install (csmaNodes.Get (nCsma));
+    /* Install TCP/UDP Transmitter on the station */
+    OnOffHelper server ("ns3::TcpSocketFactory", (InetSocketAddress (staInterface.GetAddress (i), dlPort)));
+    server.SetAttribute ("PacketSize", UintegerValue (payloadSize));
+    server.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
+     server.SetAttribute("MaxBytes", UintegerValue (2000000000));
+    serverApp = server.Install (csmaNodes.Get (nCsma));
 
   }
 
   /* Start Applications */
   clientApp.Start (Seconds (1.0));
   serverApp.Start (Seconds (0.0));
-  serverApp.Stop(Seconds (20));
+//  serverApp.Stop(Seconds (20));
 
-  Simulator::Stop (Seconds (100));
+  Simulator::Stop (Seconds (215));
 
-//  AnimationInterface anim ("wifi-exp.xml");
-//  anim.SetMaxPktsPerTraceFile(9999999999999);
-//  anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
-////  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
-////  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
-//  anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
-//  anim.SetConstantPosition(p2pNodes.Get(1), 1.0, 1.0);
-//  anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");
-//  anim.UpdateNodeDescription(p2pNodes.Get(0), "Server");
+ AnimationInterface anim ("wifi-exp.xml");
+ anim.SetMaxPktsPerTraceFile(9999999999999);
+ anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
+  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
+  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
+ anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
+ anim.SetConstantPosition(p2pNodes.Get(1), 2.0, 2.0);
+ anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");
+ anim.UpdateNodeDescription(p2pNodes.Get(0), "Server");
 
   FlowMonitorHelper flowmon;
   Ptr<FlowMonitor> monitor;
@@ -216,20 +235,22 @@ main (int argc, char *argv[])
   std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats ();
 
   for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin (); i != stats.end (); ++i) {
-  		Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (i->first);
-		std::cout << "Flow " << i->first << " (" << t.sourceAddress << " -> " << t.destinationAddress << ")\n";
-		std::cout << "  Tx Packets: " << i->second.txPackets << "\n";
-		std::cout << "  Rx Packets: " << i->second.rxPackets << "\n";
-		std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
-		std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
-		std::cout << "  Applicataion time:	" << i->second.timeFirstTxPacket - i->second.timeLastRxPacket << "\n";
-		std::cout << "  Delay:   " << (i->second.delaySum / i->second.rxPackets)   << "\n";
-		std::cout << "  Lost Packets:   " << ((i->second.lostPackets )) << "\n";
-		std::cout << "  Packet Dropped:   " << i -> second.packetsDropped.size() << "\n";
-		std::cout << "  Throughput: " << i->second.rxBytes * 8.0
-				 / (i ->second.timeLastRxPacket.GetSeconds() - i -> second.timeFirstTxPacket.GetSeconds()) / 1000 / 1000  << " Mbps\n";
-		//          std::cout << "  Packet Loss:   " << ((i->second.txPackets - i->second.rxPackets) / i->second.txPackets) * 2 << "\n";
-		}
+      Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (i->first);
+    std::cout << "Flow " << i->first << " (" << t.sourceAddress << " -> " << t.destinationAddress << ")\n";
+    std::cout << "  Tx Packets: " << i->second.txPackets << "\n";
+    std::cout << "  Rx Packets: " << i->second.rxPackets << "\n";
+    std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
+    std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
+    std::cout << "  Delay:   " << (i->second.delaySum.GetSeconds() / i->second.rxPackets)   << "\n";
+    std::cout << "  Delay Sum:   " << i->second.delaySum.GetSeconds()   << "\n";
+    std::cout << "  Lost Packets:   " << ((i->second.lostPackets )) << "\n";
+    std::cout << "  Packet Dropped:   " << i -> second.packetsDropped.size() << "\n";
+    std::cout << "  Throughput: " << i->second.rxBytes * 8.0
+         / (i ->second.timeLastRxPacket.GetSeconds() - i -> second.timeFirstTxPacket.GetSeconds()) / 1000 / 1000  << " Mbps\n";
+        std::cout << "  Time:   " << i->second.timeLastRxPacket.GetSeconds()- i->second.timeLastRxPacket.GetSeconds() << "\n";
+        std::cout << "  TxTime:   " << i->second.timeFirstTxPacket.GetSeconds() << "\n";
+        std::cout << "  RxTime:   " << i->second.timeLastRxPacket.GetSeconds() << "\n";
+    }
 
   Simulator::Destroy ();
   NS_LOG_UNCOND("Running Wi-Fi Completes");

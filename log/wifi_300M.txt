@@ -1,0 +1,83 @@
+Running Wi-Fi_1
+Flow 1 (10.1.2.2 -> 7.0.0.1)
+  Tx Packets: 214772
+  Rx Packets: 212845
+  Tx Bytes:   333321652
+  Rx Bytes:   330330948
+  Delay:   +9829297.0ns
+  Lost Packets:   3827
+  Packet Dropped:   8
+  Throughput: 6.44553 Mbps
+  Applicataion time:	409.997
+Flow 2 (10.1.2.2 -> 7.0.0.2)
+  Tx Packets: 226086
+  Rx Packets: 224078
+  Tx Bytes:   350880980
+  Rx Bytes:   347764564
+  Delay:   +9665963.0ns
+  Lost Packets:   3951
+  Packet Dropped:   8
+  Throughput: 6.78565 Mbps
+  Applicataion time:	410
+Flow 3 (10.1.2.2 -> 7.0.0.3)
+  Tx Packets: 202158
+  Rx Packets: 199808
+  Tx Bytes:   313744724
+  Rx Bytes:   310097524
+  Delay:   +9817912.0ns
+  Lost Packets:   4634
+  Packet Dropped:   8
+  Throughput: 6.05086 Mbps
+  Applicataion time:	409.988
+Flow 4 (10.1.2.2 -> 7.0.0.4)
+  Tx Packets: 198641
+  Rx Packets: 196007
+  Tx Bytes:   308286340
+  Rx Bytes:   304199868
+  Delay:   +9714404.0ns
+  Lost Packets:   5259
+  Packet Dropped:   8
+  Throughput: 5.93571 Mbps
+  Applicataion time:	409.993
+Flow 5 (7.0.0.1 -> 10.1.2.2)
+  Tx Packets: 114935
+  Rx Packets: 114926
+  Tx Bytes:   5976612
+  Rx Bytes:   5976144
+  Delay:   +9518914.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.116615 Mbps
+  Applicataion time:	409.984
+Flow 6 (7.0.0.2 -> 10.1.2.2)
+  Tx Packets: 121023
+  Rx Packets: 121015
+  Tx Bytes:   6293188
+  Rx Bytes:   6292772
+  Delay:   +9194800.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.122789 Mbps
+  Applicataion time:	410
+Flow 7 (7.0.0.3 -> 10.1.2.2)
+  Tx Packets: 108532
+  Rx Packets: 108532
+  Tx Bytes:   5643656
+  Rx Bytes:   5643656
+  Delay:   +9589099.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.110124 Mbps
+  Applicataion time:	409.996
+Flow 8 (7.0.0.4 -> 10.1.2.2)
+  Tx Packets: 106857
+  Rx Packets: 106849
+  Tx Bytes:   5556568
+  Rx Bytes:   5556152
+  Delay:   +9078344.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.109218 Mbps
+  Applicataion time:	409.98
+Running Wi-Fi_1 Completes
+ asus

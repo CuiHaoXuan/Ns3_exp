@@ -1,0 +1,22 @@
+Running Wi-Fi
+Flow 1 (10.1.2.2 -> 7.0.0.1)
+  Tx Packets: 591983
+  Rx Packets: 591950
+  Tx Bytes:   902177684
+  Rx Bytes:   902127392
+  Delay:   +10024440.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 49.4317 Mbps
+Flow 2 (7.0.0.1 -> 10.1.2.2)
+  Tx Packets: 295976
+  Rx Packets: 295948
+  Tx Bytes:   15390744
+  Rx Bytes:   15389288
+  Delay:   +9738882.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.843329 Mbps
+Running Wi-Fi Completes
+
+146(jeremy)

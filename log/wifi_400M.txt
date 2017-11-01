@@ -1,0 +1,82 @@
+Running Wi-Fi_1
+Flow 1 (10.1.2.2 -> 7.0.0.1)
+  Tx Packets: 272806
+  Rx Packets: 270313
+  Tx Bytes:   423390420
+  Rx Bytes:   419521284
+  Delay:   +9829862.0ns
+  Lost Packets:   4945
+  Packet Dropped:   8
+  Throughput: 6.45418 Mbps
+  Applicataion time:	520
+Flow 2 (10.1.2.2 -> 7.0.0.2)
+  Tx Packets: 282912
+  Rx Packets: 280288
+  Tx Bytes:   439074932
+  Rx Bytes:   435002484
+  Delay:   +9703928.0ns
+  Lost Packets:   5192
+  Packet Dropped:   8
+  Throughput: 6.69256 Mbps
+  Applicataion time:	519.983
+Flow 3 (10.1.2.2 -> 7.0.0.3)
+  Tx Packets: 257318
+  Rx Packets: 254363
+  Tx Bytes:   399353044
+  Rx Bytes:   394766884
+  Delay:   +9830169.0ns
+  Lost Packets:   5875
+  Packet Dropped:   8
+  Throughput: 6.07347 Mbps
+  Applicataion time:	519.988
+Flow 4 (10.1.2.2 -> 7.0.0.4)
+  Tx Packets: 255844
+  Rx Packets: 252600
+  Tx Bytes:   397065396
+  Rx Bytes:   392032204
+  Delay:   +9744595.0ns
+  Lost Packets:   6473
+  Packet Dropped:   8
+  Throughput: 6.03134 Mbps
+  Applicataion time:	519.994
+Flow 5 (7.0.0.1 -> 10.1.2.2)
+  Tx Packets: 145931
+  Rx Packets: 145916
+  Tx Bytes:   7588404
+  Rx Bytes:   7587624
+  Delay:   +9531212.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.116738 Mbps
+  Applicataion time:	519.985
+Flow 6 (7.0.0.2 -> 10.1.2.2)
+  Tx Packets: 151360
+  Rx Packets: 151360
+  Tx Bytes:   7870712
+  Rx Bytes:   7870712
+  Delay:   +9149653.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.121093 Mbps
+  Applicataion time:	519.987
+Flow 7 (7.0.0.3 -> 10.1.2.2)
+  Tx Packets: 138148
+  Rx Packets: 138148
+  Tx Bytes:   7183688
+  Rx Bytes:   7183688
+  Delay:   +9575304.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.110522 Mbps
+  Applicataion time:	519.995
+Flow 8 (7.0.0.4 -> 10.1.2.2)
+  Tx Packets: 137481
+  Rx Packets: 137473
+  Tx Bytes:   7149016
+  Rx Bytes:   7148600
+  Delay:   +9100168.0ns
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.110621 Mbps
+  Applicataion time:	519.984
+Running Wi-Fi_1 Completes
