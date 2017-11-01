@@ -215,8 +215,8 @@ main (int argc, char *argv[])
  AnimationInterface anim ("wifi-exp.xml");
  anim.SetMaxPktsPerTraceFile(9999999999999);
  anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
- anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
- anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
+// anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
+// anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
  anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
  anim.SetConstantPosition(p2pNodes.Get(1), 2.0, 2.0);
  anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");

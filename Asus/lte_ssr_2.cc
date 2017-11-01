@@ -223,8 +223,8 @@ main (int argc, char *argv[])
 	AnimationInterface anim ("lte-exp-2.xml");
 	anim.SetMaxPktsPerTraceFile(9999999999999);
 	anim.UpdateNodeDescription(ueNodes.Get(0), "UE1");
-	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
-	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
+//	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
+//	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
 	anim.UpdateNodeDescription(epcnodes.Get (0), "RemoteHost");
 	anim.UpdateNodeDescription(epcnodes.Get (1), "RemoteHost");
 	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");

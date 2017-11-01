@@ -49,7 +49,7 @@ int
 main (int argc, char *argv[])
 {
   uint32_t nCsma = 1;
-  uint32_t nWifi = 1;
+  uint32_t nWifi = 6;
 
   uint32_t payloadSize = 1500;                       /* Transport layer payload size in bytes. */
   std::string dataRate = "64Mbps";                  /* Application layer datarate. */
@@ -187,7 +187,7 @@ main (int argc, char *argv[])
     OnOffHelper server ("ns3::TcpSocketFactory", (InetSocketAddress (staInterface.GetAddress (i), dlPort)));
     server.SetAttribute ("PacketSize", UintegerValue (payloadSize));
     server.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
-    server.SetAttribute("MaxBytes", UintegerValue (200000000));
+    server.SetAttribute("MaxBytes", UintegerValue (2000000000));
     serverApp = server.Install (csmaNodes.Get (nCsma));
 
   }
@@ -197,7 +197,7 @@ main (int argc, char *argv[])
   serverApp.Start (Seconds (0.0));
 //  serverApp.Stop(Seconds (20));
 
-  Simulator::Stop (Seconds (36));
+  Simulator::Stop (Seconds (2000));
 
 //  AnimationInterface anim ("wifi-exp-3.xml");
 //  anim.SetMaxPktsPerTraceFile(9999999999999);
@@ -214,7 +214,7 @@ main (int argc, char *argv[])
   monitor = flowmon.Install(wifiStaNodes);
   monitor = flowmon.Install(csmaNodes);
 
-  NS_LOG_UNCOND("Running Wi-Fi-3");
+  NS_LOG_UNCOND("Running Wi-Fi-2");
   Simulator::Run ();
 
   monitor->CheckForLostPackets ();
@@ -240,6 +240,6 @@ main (int argc, char *argv[])
     }
 
   Simulator::Destroy ();
-  NS_LOG_UNCOND("Running Wi-Fi-3 Completes");
+  NS_LOG_UNCOND("Running Wi-Fi-2 Completes");
   return 0;
 }

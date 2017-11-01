@@ -227,18 +227,6 @@ main (int argc, char *argv[])
 	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
 	anim.SetConstantPosition(enbNodes.Get(0), 50.0, 50.0);
 	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
-	Simulator::Stop(Seconds(140));
-
-//	AnimationInterface anim ("lte-exp.xml");
-//	anim.SetMaxPktsPerTraceFile(9999999999999);
-//	anim.UpdateNodeDescription(ueNodes.Get(0), "UE1");
-////	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
-////	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
-//	anim.UpdateNodeDescription(epcnodes.Get (0), "RemoteHost");
-//	anim.UpdateNodeDescription(epcnodes.Get (1), "RemoteHost");
-//	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
-//	anim.SetConstantPosition(enbNodes.Get(0), 0.2, 0.2);
-//	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
 
 	FlowMonitorHelper flowmon;
 	Ptr<FlowMonitor> monitor;
