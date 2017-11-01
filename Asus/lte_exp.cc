@@ -124,11 +124,7 @@ main (int argc, char *argv[])
 
 	// Create the Internet
 	PointToPointHelper p2ph;
-<<<<<<< HEAD
-	p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Mbps")));
-=======
 	p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("1Gbps")));
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 //	p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
 	p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
 	NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
@@ -145,26 +141,8 @@ main (int argc, char *argv[])
 	enbNodes.Create(numberOfeNodeB);
 	ueNodes.Create(numberOfue);
 
-//	Ptr<ListPositionAllocator> positionAllocepc = CreateObject<ListPositionAllocator> ();
-//	for (uint16_t i = 0; i < epcnodes.GetN(); i++)
-//		      {
-//		    	positionAllocepc->Add (Vector(500 * (i+1), 0, 0));
-//		      }
-//	MobilityHelper mobilityepc;
-//	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-//	mobilityepc.SetPositionAllocator(positionAllocepc);
-//	mobilityepc.Install(epcnodes);
-
-
-	// Install Mobility Model
-//	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-//	for (uint16_t i = 0; i < numberOfeNodeB; i++){
-//
-//			positionAlloc->Add (Vector(distance * i, 0, 0));
-//		}
 	/* Mobility model */
 	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-<<<<<<< HEAD
 	positionAlloc->Add (Vector (60.0, 0.0, 0.0));
 	// positionAlloc->Add (Vector (1.0, 1.0, 0.0));
 
@@ -186,17 +164,7 @@ main (int argc, char *argv[])
                                 "Bounds", RectangleValue (Rectangle (-150, 750, -500 , 750 )));
 	// mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
 	// mobility.SetPositionAllocator(positionAlloc);
-=======
-	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
-	positionAlloc->Add (Vector (1.0, 1.0, 0.0));
 
-	MobilityHelper mobility;
-
-//	mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-//	                             "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
-	mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-	mobility.SetPositionAllocator(positionAlloc);
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 	mobility.Install(ueNodes);
 
 	MobilityHelper mobilityepc;
@@ -236,11 +204,8 @@ main (int argc, char *argv[])
 			OnOffHelper onOffHelper ("ns3::TcpSocketFactory", InetSocketAddress (ueIpIface.GetAddress(u), dlPort));
 			onOffHelper.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
 			onOffHelper.SetAttribute ("PacketSize",UintegerValue(payloadSize));
-<<<<<<< HEAD
 			onOffHelper.SetAttribute("MaxBytes", UintegerValue (100000000));
-=======
 			onOffHelper.SetAttribute("MaxBytes", UintegerValue (1400000000));
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 			serverApps.Add(onOffHelper.Install(remoteHost));//tcp sender
 			PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
 			clientApps.Add( sink.Install (ueNodes.Get (u)));//tcp reciever
@@ -250,7 +215,6 @@ main (int argc, char *argv[])
 	serverApps.Start (Seconds (0.0));
 //	serverApps.Stop(Seconds (30.0));
 	clientApps.Start (Seconds (1.0));
-<<<<<<< HEAD
 	Simulator::Stop(Seconds(2000));
 
 	AnimationInterface anim ("lte-exp.xml");
@@ -263,7 +227,6 @@ main (int argc, char *argv[])
 	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
 	anim.SetConstantPosition(enbNodes.Get(0), 50.0, 50.0);
 	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
-=======
 	Simulator::Stop(Seconds(140));
 
 //	AnimationInterface anim ("lte-exp.xml");
@@ -276,7 +239,6 @@ main (int argc, char *argv[])
 //	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
 //	anim.SetConstantPosition(enbNodes.Get(0), 0.2, 0.2);
 //	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 
 	FlowMonitorHelper flowmon;
 	Ptr<FlowMonitor> monitor;
@@ -298,11 +260,8 @@ main (int argc, char *argv[])
           std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
           std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
           std::cout << "  Delay:   " << (i->second.delaySum.GetSeconds() / i->second.rxPackets)   << "\n";
-<<<<<<< HEAD
           std::cout << "  Delay Sum:   " << i->second.delaySum.GetSeconds()   << "\n";
-=======
           std::cout << "  Delay Sum:   " << (i->second.delaySum.GetSeconds())   << "\n";
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
           std::cout << "  Lost Packets:   " << ((i->second.lostPackets )) << "\n";
           std::cout << "  Packet Dropped:   " << i -> second.packetsDropped.size() << "\n";
           std::cout << "  Throughput: " << i->second.rxBytes * 8.0

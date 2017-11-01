@@ -140,17 +140,7 @@ main (int argc, char *argv[])
                                  "MinY", DoubleValue (7.0),
                                  "DeltaX", DoubleValue (5.0),
                                  "DeltaY", DoubleValue (10.0),
-<<<<<<< HEAD
                                  "GridWidth", UintegerValue (10),
-                                 "LayoutType", StringValue ("RowFirst"));
-
-  mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-  							 "Distance", DoubleValue(100.0),
-                             "Speed", StringValue("ns3::UniformRandomVariable[Min=2.0|Max=10.0]"),
-                             "Direction", StringValue("ns3::UniformRandomVariable[Min=0.0|Max=6.283184]"),
-                             "Bounds", RectangleValue (Rectangle (-10, 25, -10, 25)));
-=======
-                                 "GridWidth", UintegerValue (5),
                                  "LayoutType", StringValue ("RowFirst"));
 
 //  mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
@@ -165,7 +155,6 @@ main (int argc, char *argv[])
 							 "MaxX", DoubleValue(10.0),
 							 "MinY", DoubleValue(5.0),
 							 "MaxY", DoubleValue(10.0));
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
  mobility.Install (wifiStaNodes);
 
   /* Mobility model */
@@ -211,11 +200,7 @@ main (int argc, char *argv[])
     OnOffHelper server ("ns3::TcpSocketFactory", (InetSocketAddress (staInterface.GetAddress (i), dlPort)));
     server.SetAttribute ("PacketSize", UintegerValue (payloadSize));
     server.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
-<<<<<<< HEAD
-    server.SetAttribute("MaxBytes", UintegerValue (1000000000));
-=======
-     server.SetAttribute("MaxBytes", UintegerValue (2000000000));
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
+    server.SetAttribute("MaxBytes", UintegerValue (2000000000));
     serverApp = server.Install (csmaNodes.Get (nCsma));
 
   }
@@ -225,26 +210,15 @@ main (int argc, char *argv[])
   serverApp.Start (Seconds (0.0));
 //  serverApp.Stop(Seconds (20));
 
-<<<<<<< HEAD
-  Simulator::Stop (Seconds (111));
-=======
   Simulator::Stop (Seconds (215));
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 
  AnimationInterface anim ("wifi-exp.xml");
  anim.SetMaxPktsPerTraceFile(9999999999999);
  anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
-<<<<<<< HEAD
  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
  anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
- anim.SetConstantPosition(p2pNodes.Get(1), 1.0, 1.0);
-=======
-  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
-  anim.UpdateNodeDescription(wifiStaNodes.Get(2), "UE3");
- anim.UpdateNodeDescription(p2pNodes.Get(1), "AP");
  anim.SetConstantPosition(p2pNodes.Get(1), 2.0, 2.0);
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
  anim.UpdateNodeDescription(csmaNodes.Get(nCsma), "Server");
  anim.UpdateNodeDescription(p2pNodes.Get(0), "Server");
 

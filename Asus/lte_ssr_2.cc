@@ -48,11 +48,7 @@ main (int argc, char *argv[])
 
 	//setup ue and enodeb
 	uint16_t numberOfeNodeB =1;
-<<<<<<< HEAD
 	uint16_t numberOfue =1;
-=======
-	uint16_t numberOfue =5;
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 
 	double distance = 100.0;
 	std::string dataRate = "100.8Mbps";
@@ -128,11 +124,7 @@ main (int argc, char *argv[])
 
 	// Create the Internet
 	PointToPointHelper p2ph;
-<<<<<<< HEAD
-	p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Mbps")));
-=======
 	p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("1Gbps")));
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 //	p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
 	p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
 	NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
@@ -149,52 +141,6 @@ main (int argc, char *argv[])
 	enbNodes.Create(numberOfeNodeB);
 	ueNodes.Create(numberOfue);
 
-<<<<<<< HEAD
-//	Ptr<ListPositionAllocator> positionAllocepc = CreateObject<ListPositionAllocator> ();
-//	for (uint16_t i = 0; i < epcnodes.GetN(); i++)
-//		      {
-//		    	positionAllocepc->Add (Vector(500 * (i+1), 0, 0));
-//		      }
-//	MobilityHelper mobilityepc;
-//	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-//	mobilityepc.SetPositionAllocator(positionAllocepc);
-//	mobilityepc.Install(epcnodes);
-
-
-	// Install Mobility Model
-//	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-//	for (uint16_t i = 0; i < numberOfeNodeB; i++){
-//
-//			positionAlloc->Add (Vector(distance * i, 0, 0));
-//		}
-	/* Mobility model */
-	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
-	positionAlloc->Add (Vector (1.0, 1.0, 0.0));
-
-	MobilityHelper mobility;
-	mobility.SetPositionAllocator ("ns3::GridPositionAllocator",
-	                                    "MinX", DoubleValue (251.0),
-	                                    "MinY", DoubleValue (501.0),
-	                                    "DeltaX", DoubleValue (80.0),
-	                                    "DeltaY", DoubleValue (60.0),
-	                                    "GridWidth", UintegerValue (5),
-	                                    "LayoutType", StringValue ("RowFirst"));
-
-	mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-									"Mode", StringValue ("Distance"),
-									"Distance", DoubleValue (10),
-									"Time", TimeValue(Seconds(0.5)),
-									"Speed", StringValue("ns3::UniformRandomVariable[Min=13.0|Max=36.0]"), // 50Km/h-130Km/h
-									"Direction", StringValue("ns3::UniformRandomVariable[Min=0.0|Max=6.283184]"), // 0-360
-									"Bounds", RectangleValue (Rectangle (250, 750, 500 , 750)));
-	// mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-	// mobility.SetPositionAllocator(positionAlloc);
-	mobility.Install(ueNodes);
-
-//	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-//	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
-=======
 	MobilityHelper mobility;
 
 	mobility.SetPositionAllocator ("ns3::GridPositionAllocator",
@@ -225,7 +171,6 @@ main (int argc, char *argv[])
 	Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
 	positionAlloc->Add (Vector (0.0, 0.0, 0.0));
 //	positionAlloc->Add (Vector (1.0, 1.0, 0.0));
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 	MobilityHelper mobilityepc;
 	mobilityepc.SetMobilityModel("ns3::ConstantPositionMobilityModel");
 	mobilityepc.SetPositionAllocator(positionAlloc);
@@ -251,7 +196,6 @@ main (int argc, char *argv[])
 		}
 
 	lteHelper -> Attach(ueLteDevs);
-//	lteHelper -> Attach(ueLteDevs.Get(0), enbLteDevs.Get(0));
 
 	// Install and start applications on UEs and remote host
 	uint16_t dlPort = 1234;
@@ -263,11 +207,7 @@ main (int argc, char *argv[])
 			OnOffHelper onOffHelper ("ns3::TcpSocketFactory", InetSocketAddress (ueIpIface.GetAddress(u), dlPort));
 			onOffHelper.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
 			onOffHelper.SetAttribute ("PacketSize",UintegerValue(payloadSize));
-<<<<<<< HEAD
-			onOffHelper.SetAttribute("MaxBytes", UintegerValue (4200000000));
-=======
 			onOffHelper.SetAttribute("MaxBytes", UintegerValue (1000000000));
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 			serverApps.Add(onOffHelper.Install(remoteHost));//tcp sender
 			PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
 			clientApps.Add( sink.Install (ueNodes.Get (u)));//tcp reciever
@@ -277,22 +217,8 @@ main (int argc, char *argv[])
 	serverApps.Start (Seconds (0.0));
 //	serverApps.Stop(Seconds (30.0));
 	clientApps.Start (Seconds (1.0));
-<<<<<<< HEAD
 	Simulator::Stop(Seconds(290));
 
-//	AnimationInterface anim ("lte-exp-2.xml");
-//	anim.SetMaxPktsPerTraceFile(9999999999);
-//	anim.UpdateNodeDescription(ueNodes.Get(0), "UE1");
-//	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
-////	anim.UpdateNodeDescription(ueNodes.Get(2), "UE3");
-//	anim.UpdateNodeDescription(epcnodes.Get (0), "RemoteHost");
-//	anim.UpdateNodeColor(epcnodes.Get(0), 10, 255, 10);
-//	anim.UpdateNodeDescription(epcnodes.Get (1), "RemoteHost");
-//	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
-//	anim.SetConstantPosition(enbNodes.Get(0), 10.0, 10.0);
-//	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
-=======
-	Simulator::Stop(Seconds(2000));
 
 	AnimationInterface anim ("lte-exp-2.xml");
 	anim.SetMaxPktsPerTraceFile(9999999999999);
@@ -304,18 +230,13 @@ main (int argc, char *argv[])
 	anim.UpdateNodeDescription(enbNodes.Get(0), "eNB");
 	anim.SetConstantPosition(enbNodes.Get(0), 50, 50);
 	anim.UpdateNodeColor(enbNodes.Get(0), 255, 10, 10);
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 
 	FlowMonitorHelper flowmon;
 	Ptr<FlowMonitor> monitor;
 	monitor = flowmon.Install(server);
 	monitor = flowmon.Install(ueNodes);
 
-<<<<<<< HEAD
-	NS_LOG_UNCOND("Running Lte_2");
-=======
 	NS_LOG_UNCOND("Running Lte-2");
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 	Simulator::Run();
 
 	monitor->CheckForLostPackets ();
@@ -330,11 +251,7 @@ main (int argc, char *argv[])
           std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
           std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
           std::cout << "  Delay:   " << (i->second.delaySum.GetSeconds() / i->second.rxPackets)   << "\n";
-<<<<<<< HEAD
           std::cout << "  Delay Sum:   " << i->second.delaySum.GetSeconds()  << "\n";
-=======
-          std::cout << "  Delay Sum:   " << i->second.delaySum.GetSeconds()   << "\n";
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
           std::cout << "  Lost Packets:   " << ((i->second.lostPackets )) << "\n";
           std::cout << "  Packet Dropped:   " << i -> second.packetsDropped.size() << "\n";
           std::cout << "  Throughput: " << i->second.rxBytes * 8.0
@@ -346,11 +263,7 @@ main (int argc, char *argv[])
 
 	Simulator::Destroy();
 
-<<<<<<< HEAD
-	NS_LOG_UNCOND("Running Lte_2 Completes");
-=======
 	NS_LOG_UNCOND("Running Lte-2 Completes");
->>>>>>> 095398f41b8f5c99a74067626b3ed506cdee8713
 
 	return 0;
 
