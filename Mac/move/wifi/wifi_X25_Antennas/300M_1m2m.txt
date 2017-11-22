@@ -1,0 +1,82 @@
+Flow 1 (10.1.2.2 -> 7.0.0.1)
+  Tx Packets: 210321
+  Rx Packets: 209221
+  Tx Bytes:   326413700
+  Rx Bytes:   324706500
+  Delay:   0.00513914
+  Delay Sum:   1075.22
+  Lost Packets:   2156
+  Packet Dropped:   8
+  Throughput: 10.7345 Mbps
+  Time:   0
+  TxTime:   0
+  RxTime:   241.99
+Flow 2 (10.1.2.2 -> 7.0.0.2)
+  Tx Packets: 210710
+  Rx Packets: 209579
+  Tx Bytes:   327017428
+  Rx Bytes:   325262116
+  Delay:   0.0051405
+  Delay Sum:   1077.34
+  Lost Packets:   2246
+  Packet Dropped:   8
+  Throughput: 10.7527 Mbps
+  Time:   0
+  TxTime:   0
+  RxTime:   241.995
+Flow 3 (10.1.2.2 -> 7.0.0.3)
+  Tx Packets: 196420
+  Rx Packets: 195264
+  Tx Bytes:   304839348
+  Rx Bytes:   303045236
+  Delay:   0.0051942
+  Delay Sum:   1014.24
+  Lost Packets:   2285
+  Packet Dropped:   8
+  Throughput: 10.0181 Mbps
+  Time:   0
+  TxTime:   0
+  RxTime:   241.998
+Flow 4 (7.0.0.3 -> 10.1.2.2)
+  Tx Packets: 104577
+  Rx Packets: 104569
+  Tx Bytes:   5437996
+  Rx Bytes:   5437580
+  Delay:   0.00746822
+  Delay Sum:   780.945
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.179759 Mbps
+  Time:   0
+  TxTime:   0.00517234
+  RxTime:   242
+Flow 5 (7.0.0.1 -> 10.1.2.2)
+  Tx Packets: 111684
+  Rx Packets: 111684
+  Tx Bytes:   5807560
+  Rx Bytes:   5807560
+  Delay:   0.0074894
+  Delay Sum:   836.446
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.191991 Mbps
+  Time:   0
+  TxTime:   0.00637058
+  RxTime:   241.999
+Flow 6 (7.0.0.2 -> 10.1.2.2)
+  Tx Packets: 112000
+  Rx Packets: 111990
+  Tx Bytes:   5823992
+  Rx Bytes:   5823472
+  Delay:   0.0075078
+  Delay Sum:   840.799
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.19252 Mbps
+  Time:   0
+  TxTime:   0.0112845
+  RxTime:   242
+Running Wi-Fi Completes
+
+
+1m/s - 2m/s
