@@ -1,0 +1,82 @@
+Waf: Entering directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
+Waf: Leaving directory `/home/jeremy/User/workspace/ns-allinone-3.26/ns-3.26/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.051s)
+Flow 1 (10.1.2.2 -> 7.0.0.1)
+  Tx Packets: 61138
+  Rx Packets: 60672
+  Tx Bytes:   94881684
+  Rx Bytes:   94158452
+  Delay:   0.0102064
+  Delay Sum:   619.242
+  Lost Packets:   862
+  Packet Dropped:   8
+  Throughput: 7.38915 Mbps
+  Time:   0
+  TxTime:   0
+  RxTime:   101.942
+Flow 2 (10.1.2.2 -> 7.0.0.2)
+  Tx Packets: 328526
+  Rx Packets: 327376
+  Tx Bytes:   509867860
+  Rx Bytes:   508083060
+  Delay:   0.0101605
+  Delay Sum:   3326.31
+  Lost Packets:   2049
+  Packet Dropped:   8
+  Throughput: 11.303 Mbps
+  Time:   0
+  TxTime:   0
+  RxTime:   359.611
+Flow 3 (10.1.2.2 -> 7.0.0.3)
+  Tx Packets: 270670
+  Rx Packets: 269368
+  Tx Bytes:   420075348
+  Rx Bytes:   418054644
+  Delay:   0.00995518
+  Delay Sum:   2681.61
+  Lost Packets:   2220
+  Packet Dropped:   8
+  Throughput: 9.30853 Mbps
+  Time:   0
+  TxTime:   0
+  RxTime:   359.287
+Flow 4 (7.0.0.3 -> 10.1.2.2)
+  Tx Packets: 140682
+  Rx Packets: 140681
+  Tx Bytes:   7315456
+  Rx Bytes:   7315404
+  Delay:   0.00948959
+  Delay Sum:   1335.01
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 0.162886 Mbps
+  Time:   0
+  TxTime:   0.00517234
+  RxTime:   359.296
+Flow 5 (7.0.0.1 -> 10.1.2.2)
+  Tx Packets: 32160
+  Rx Packets: 32160
+  Tx Bytes:   1672312
+  Rx Bytes:   1672312
+  Delay:   0.00927964
+  Delay Sum:   298.433
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.131207 Mbps
+  Time:   0
+  TxTime:   0.00637044
+  RxTime:   101.971
+Flow 6 (7.0.0.2 -> 10.1.2.2)
+  Tx Packets: 169419
+  Rx Packets: 169387
+  Tx Bytes:   8809780
+  Rx Bytes:   8808116
+  Delay:   0.00956804
+  Delay Sum:   1620.7
+  Lost Packets:   32
+  Packet Dropped:   4
+  Throughput: 0.195839 Mbps
+  Time:   0
+  TxTime:   0.0112845
+  RxTime:   359.822
