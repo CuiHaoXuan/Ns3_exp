@@ -155,12 +155,12 @@ main (int argc, char *argv[])
 //                             "Direction", StringValue("ns3::UniformRandomVariable[Min=0.0|Max=6.283184]"),
 //                             "Bounds", RectangleValue (Rectangle (-25, 30, -25, 30)));
   mobility.SetMobilityModel ("ns3::SteadyStateRandomWaypointMobilityModel",
-                            "MinSpeed", DoubleValue(2.0),
-                            "MaxSpeed", DoubleValue(3.0),
+                            "MinSpeed", DoubleValue(5.0),
+                            "MaxSpeed", DoubleValue(6.0),
                             "MinX", DoubleValue(1.0),
-                            "MaxX", DoubleValue(25.0),
+                            "MaxX", DoubleValue(90.0),
                             "MinY", DoubleValue(1.0),
-                            "MaxY", DoubleValue(25.0));
+                            "MaxY", DoubleValue(90.0));
  mobility.Install (wifiStaNodes);
 
   /* Mobility model */
@@ -206,7 +206,7 @@ main (int argc, char *argv[])
     OnOffHelper server ("ns3::TcpSocketFactory", (InetSocketAddress (staInterface.GetAddress (i), dlPort)));
     server.SetAttribute ("PacketSize", UintegerValue (payloadSize));
     server.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
-    server.SetAttribute("MaxBytes", UintegerValue (3000000000));
+    server.SetAttribute("MaxBytes", UintegerValue (48006000000));
     serverApp = server.Install (csmaNodes.Get (nCsma));
 
   }
@@ -216,7 +216,7 @@ main (int argc, char *argv[])
   serverApp.Start (Seconds (0.0));
 //  serverApp.Stop(Seconds (20));
 
-  Simulator::Stop (Seconds (660));
+  Simulator::Stop (Seconds (233.5));
 
  AnimationInterface anim ("wifi-ssr-3.xml");
  anim.SetMaxPktsPerTraceFile(9999999999999);

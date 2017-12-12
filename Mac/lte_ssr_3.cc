@@ -215,7 +215,7 @@ main (int argc, char *argv[])
 			OnOffHelper onOffHelper ("ns3::TcpSocketFactory", InetSocketAddress (ueIpIface.GetAddress(u), dlPort));
 			onOffHelper.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
 			onOffHelper.SetAttribute ("PacketSize",UintegerValue(payloadSize));
-			onOffHelper.SetAttribute("MaxBytes", UintegerValue (5350000000));
+			onOffHelper.SetAttribute("MaxBytes", UintegerValue (3377000000));
 			serverApps.Add(onOffHelper.Install(remoteHost));//tcp sender
 			PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
 			clientApps.Add( sink.Install (ueNodes.Get (u)));//tcp reciever
@@ -227,7 +227,7 @@ main (int argc, char *argv[])
 	clientApps.Start (Seconds (1.0));
 	Simulator::Stop(Seconds(1000));
 
-	AnimationInterface anim ("lte-ssr.xml");
+	AnimationInterface anim ("lte-ssr-3.xml");
 	anim.SetMaxPktsPerTraceFile(9999999999999);
 	anim.UpdateNodeDescription(ueNodes.Get(0), "UE1");
 	anim.UpdateNodeDescription(ueNodes.Get(1), "UE2");
@@ -243,7 +243,7 @@ main (int argc, char *argv[])
 	monitor = flowmon.Install(server);
 	monitor = flowmon.Install(ueNodes);
 
-	NS_LOG_UNCOND("Running Lte");
+	NS_LOG_UNCOND("Running Lte-3");
 	Simulator::Run();
 
 	monitor->CheckForLostPackets ();
@@ -270,7 +270,7 @@ main (int argc, char *argv[])
 
 	Simulator::Destroy();
 
-	NS_LOG_UNCOND("Running Lte Completes");
+	NS_LOG_UNCOND("Running Lte-3 Completes");
 
 	return 0;
 

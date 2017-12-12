@@ -155,11 +155,11 @@ main (int argc, char *argv[])
 //                             "Bounds", RectangleValue (Rectangle (-25, 30, -25, 30)));
   mobility.SetMobilityModel ("ns3::SteadyStateRandomWaypointMobilityModel",
   	  	  	  	  	  	    "MinSpeed", DoubleValue(5.0),
-	  	  	  	  	  	 	"MaxSpeed", DoubleValue(6.0),
-  							"MinX", DoubleValue(1.0),
-  							"MaxX", DoubleValue(90.0),
-  							"MinY", DoubleValue(1.0),
-  							"MaxY", DoubleValue(90.0));
+	  	  	  	  	  	 	    "MaxSpeed", DoubleValue(6.0),
+              							"MinX", DoubleValue(1.0),
+              							"MaxX", DoubleValue(90.0),
+              							"MinY", DoubleValue(1.0),
+              							"MaxY", DoubleValue(90.0));
  mobility.Install (wifiStaNodes);
 
   /* Mobility model */
@@ -215,9 +215,9 @@ main (int argc, char *argv[])
   serverApp.Start (Seconds (0.0));
 //  serverApp.Stop(Seconds (20));
 
-  Simulator::Stop (Seconds (515));
+  Simulator::Stop (Seconds (492));
 
- AnimationInterface anim ("wifi-ssr.xml");
+ AnimationInterface anim ("wifi-ssr-2.xml");
  anim.SetMaxPktsPerTraceFile(9999999999999);
  anim.UpdateNodeDescription(wifiStaNodes.Get(0), "UE1");
  anim.UpdateNodeDescription(wifiStaNodes.Get(1), "UE2");
@@ -232,7 +232,7 @@ main (int argc, char *argv[])
   monitor = flowmon.Install(wifiStaNodes);
   monitor = flowmon.Install(csmaNodes);
 
-  NS_LOG_UNCOND("Running Wi-Fi");
+  NS_LOG_UNCOND("Running Wi-Fi-2");
   Simulator::Run ();
 
   monitor->CheckForLostPackets ();
@@ -258,6 +258,6 @@ main (int argc, char *argv[])
     }
 
   Simulator::Destroy ();
-  NS_LOG_UNCOND("Running Wi-Fi Completes");
+  NS_LOG_UNCOND("Running Wi-Fi-2 Completes");
   return 0;
 }

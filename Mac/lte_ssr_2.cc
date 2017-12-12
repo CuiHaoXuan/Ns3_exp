@@ -165,8 +165,8 @@ main (int argc, char *argv[])
 
 
 	mobility.SetMobilityModel ("ns3::SteadyStateRandomWaypointMobilityModel",
-								 "MinSpeed", DoubleValue(2.0),
-								 "MaxSpeed", DoubleValue(3.0),
+								 "MinSpeed", DoubleValue(4.0),
+								 "MaxSpeed", DoubleValue(10.0),
 								 "MinX", DoubleValue(1.0),
 								 "MaxX", DoubleValue(5000.0),
 								 "MinY", DoubleValue(1.0),
@@ -215,7 +215,7 @@ main (int argc, char *argv[])
 			OnOffHelper onOffHelper ("ns3::TcpSocketFactory", InetSocketAddress (ueIpIface.GetAddress(u), dlPort));
 			onOffHelper.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate)));
 			onOffHelper.SetAttribute ("PacketSize",UintegerValue(payloadSize));
-			onOffHelper.SetAttribute("MaxBytes", UintegerValue (390000000));
+			onOffHelper.SetAttribute("MaxBytes", UintegerValue (5365000000));
 			serverApps.Add(onOffHelper.Install(remoteHost));//tcp sender
 			PacketSinkHelper sink ("ns3::TcpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
 			clientApps.Add( sink.Install (ueNodes.Get (u)));//tcp reciever

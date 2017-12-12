@@ -1,0 +1,81 @@
+Flow 1 (1.0.0.2 -> 7.0.0.2)
+  Tx Packets: 45529
+  Rx Packets: 45528
+  Tx Bytes:   70653516
+  Rx Bytes:   70653460
+  Delay:   0.0399632
+  Delay Sum:   1819.45
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 9.11349 Mbps
+  Time:	  0
+  TxTime:	  0
+  RxTime:	  62.021
+Flow 2 (1.0.0.2 -> 7.0.0.3)
+  Tx Packets: 45540
+  Rx Packets: 45539
+  Tx Bytes:   70670588
+  Rx Bytes:   70670532
+  Delay:   0.0400743
+  Delay Sum:   1824.94
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 9.1154 Mbps
+  Time:	  0
+  TxTime:	  0
+  RxTime:	  62.023
+Flow 3 (1.0.0.2 -> 7.0.0.4)
+  Tx Packets: 45537
+  Rx Packets: 45536
+  Tx Bytes:   70665932
+  Rx Bytes:   70665876
+  Delay:   0.0400185
+  Delay Sum:   1822.28
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 9.11494 Mbps
+  Time:	  0
+  TxTime:	  0
+  RxTime:	  62.022
+Flow 4 (7.0.0.3 -> 1.0.0.2)
+  Tx Packets: 22784
+  Rx Packets: 22784
+  Tx Bytes:   1184772
+  Rx Bytes:   1184772
+  Delay:   0.0169492
+  Delay Sum:   386.171
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.160658 Mbps
+  Time:	  0
+  TxTime:	  3.014
+  RxTime:	  62.0099
+Flow 5 (7.0.0.4 -> 1.0.0.2)
+  Tx Packets: 22782
+  Rx Packets: 22782
+  Tx Bytes:   1184668
+  Rx Bytes:   1184668
+  Delay:   0.016949
+  Delay Sum:   386.133
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.160649 Mbps
+  Time:	  0
+  TxTime:	  3.015
+  RxTime:	  62.0089
+Flow 6 (7.0.0.2 -> 1.0.0.2)
+  Tx Packets: 22778
+  Rx Packets: 22778
+  Tx Bytes:   1184460
+  Rx Bytes:   1184460
+  Delay:   0.0169488
+  Delay Sum:   386.06
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.160627 Mbps
+  Time:	  0
+  TxTime:	  3.016
+  RxTime:	  62.0079
+Running Lte-2 Completes
+
+2m/s - 3m/s
