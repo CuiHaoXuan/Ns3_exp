@@ -1,0 +1,80 @@
+Flow 1 (1.0.0.2 -> 7.0.0.2)
+  Tx Packets: 572205
+  Rx Packets: 572204
+  Tx Bytes:   888054668
+  Rx Bytes:   888054612
+  Delay:   0.0400816
+  Delay Sum:   22934.8
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 9.47972 Mbps
+  Time:	  0
+  TxTime:	  0
+  RxTime:	  749.435
+Flow 2 (1.0.0.2 -> 7.0.0.3)
+  Tx Packets: 572780
+  Rx Packets: 572779
+  Tx Bytes:   888947068
+  Rx Bytes:   888947012
+  Delay:   0.0401069
+  Delay Sum:   22972.4
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 9.48926 Mbps
+  Time:	  0
+  TxTime:	  0
+  RxTime:	  749.434
+Flow 3 (1.0.0.2 -> 7.0.0.4)
+  Tx Packets: 572590
+  Rx Packets: 572589
+  Tx Bytes:   888652188
+  Rx Bytes:   888652132
+  Delay:   0.0400677
+  Delay Sum:   22942.3
+  Lost Packets:   1
+  Packet Dropped:   0
+  Throughput: 9.48613 Mbps
+  Time:	  0
+  TxTime:	  0
+  RxTime:	  749.433
+Flow 4 (7.0.0.3 -> 1.0.0.2)
+  Tx Packets: 286576
+  Rx Packets: 286576
+  Tx Bytes:   14901956
+  Rx Bytes:   14901956
+  Delay:   0.0169463
+  Delay Sum:   4856.39
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.159719 Mbps
+  Time:	  0
+  TxTime:	  3.014
+  RxTime:	  749.421
+Flow 5 (7.0.0.4 -> 1.0.0.2)
+  Tx Packets: 286480
+  Rx Packets: 286480
+  Tx Bytes:   14896964
+  Rx Bytes:   14896964
+  Delay:   0.016948
+  Delay Sum:   4855.27
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.159666 Mbps
+  Time:	  0
+  TxTime:	  3.015
+  RxTime:	  749.42
+Flow 6 (7.0.0.2 -> 1.0.0.2)
+  Tx Packets: 286288
+  Rx Packets: 286288
+  Tx Bytes:   14886980
+  Rx Bytes:   14886980
+  Delay:   0.017037
+  Delay Sum:   4877.49
+  Lost Packets:   0
+  Packet Dropped:   0
+  Throughput: 0.159559 Mbps
+  Time:	  0
+  TxTime:	  3.016
+  RxTime:	  749.422
+
+5m/s - 6m/s
